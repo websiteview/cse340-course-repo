@@ -27,3 +27,81 @@ VALUES
     'hello@unityserve.org',
     'unityserve-logo.png'
 );
+
+/* =========================
+   PROJECT TABLE
+========================= */
+
+CREATE TABLE project (
+    project_id SERIAL PRIMARY KEY,
+
+    organization_id INT NOT NULL,
+
+    title VARCHAR(150) NOT NULL,
+
+    description TEXT NOT NULL,
+
+    location VARCHAR(150) NOT NULL,
+
+    project_date DATE NOT NULL,
+
+    CONSTRAINT fk_organization
+        FOREIGN KEY (organization_id)
+        REFERENCES organization(organization_id)
+);
+
+/* =========================
+   SAMPLE PROJECT DATA
+========================= */
+
+INSERT INTO project
+(
+    organization_id,
+    title,
+    description,
+    location,
+    project_date
+)
+VALUES
+(
+    1,
+    'Community Playground Build',
+    'Building a safe playground for children.',
+    'Boise, Idaho',
+    '2026-06-10'
+),
+(
+    1,
+    'Neighborhood Cleanup',
+    'Cleaning parks and sidewalks.',
+    'Rexburg, Idaho',
+    '2026-06-15'
+),
+(
+    2,
+    'Urban Garden Expansion',
+    'Expanding community food gardens.',
+    'Idaho Falls, Idaho',
+    '2026-07-01'
+),
+(
+    2,
+    'Sustainability Workshop',
+    'Teaching sustainable farming methods.',
+    'Pocatello, Idaho',
+    '2026-07-10'
+),
+(
+    3,
+    'Food Drive',
+    'Collecting canned food donations.',
+    'Twin Falls, Idaho',
+    '2026-08-01'
+),
+(
+    3,
+    'Volunteer Training',
+    'Training new community volunteers.',
+    'Boise, Idaho',
+    '2026-08-12'
+);
