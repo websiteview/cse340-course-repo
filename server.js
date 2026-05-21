@@ -1,10 +1,11 @@
+import 'dotenv/config';
+
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+
 import { testConnection } from './src/models/db.js';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import router from './src/routes.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -14,17 +15,31 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-/* Static files */
+/* =========================
+   STATIC FILES
+========================= */
+
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* =========================
+   VIEW ENGINE
+========================= */
+
 app.set('view engine', 'ejs');
+
 app.set('views', path.join(__dirname, 'src/views'));
+
+/* =========================
+   MIDDLEWARE
+========================= */
 
 /* Middleware to log all incoming requests */
 app.use((req, res, next) => {
 
     if (NODE_ENV === 'development') {
+
         console.log(`${req.method} ${req.url}`);
+
     }
 
     next();
@@ -40,59 +55,17 @@ app.use((req, res, next) => {
 
 });
 
-/* Routes */
-app.get('/', (req, res) => {
-    res.render('home', { title: 'Home' });
-});
+/* =========================
+   ROUTES
+========================= */
 
-app.get('/organizations', async (req, res) => {
+/* Use imported router */
+app.use(router);
 
-    const organizations = await getAllOrganizations();
+/* =========================
+   404 ERROR HANDLER
+========================= */
 
-    const title = 'Our Partner Organizations';
-
-    res.render('organizations', {
-        title,
-        organizations
-    });
-});
-
-app.get('/projects', async (req, res) => {
-
-    const projects = await getAllProjects();
-
-    const title = 'Upcoming Service Projects';
-
-    res.render('projects', {
-        title,
-        projects
-    });
-});
-
-app.get('/categories', async (req, res) => {
-
-    const categories = await getAllCategories();
-
-    const title = 'Project Categories';
-
-    res.render('categories', {
-        title,
-        categories
-    });
-});
-
-/* Test route for 500 errors */
-app.get('/test-error', (req, res, next) => {
-
-    const err = new Error('This is a test error');
-
-    err.status = 500;
-
-    next(err);
-
-});
-
-/* Catch-all route for 404 errors */
 app.use((req, res, next) => {
 
     const err = new Error('Page Not Found');
@@ -103,7 +76,10 @@ app.use((req, res, next) => {
 
 });
 
-/* Global error handler */
+/* =========================
+   GLOBAL ERROR HANDLER
+========================= */
+
 app.use((err, req, res, next) => {
 
     console.error('Error occurred:', err.message);
@@ -134,7 +110,10 @@ app.use((err, req, res, next) => {
 
 });
 
-/* Start server */
+/* =========================
+   START SERVER
+========================= */
+
 app.listen(PORT, async () => {
 
     try {
@@ -142,6 +121,7 @@ app.listen(PORT, async () => {
         await testConnection();
 
         console.log(`Server running at http://127.0.0.1:${PORT}`);
+
         console.log(`Environment: ${NODE_ENV}`);
 
     } catch (error) {
@@ -149,4 +129,5 @@ app.listen(PORT, async () => {
         console.error('Error connecting to the database:', error);
 
     }
+
 });
