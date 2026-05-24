@@ -1,0 +1,27 @@
+<% organizations.forEach(org => { %>
+
+    <div class="organization-card">
+
+        <img 
+        
+            src="/images/<%= org.logo_filename %>" 
+            alt="<%= org.name %> logo"
+            width="200"
+        >
+
+        <h2>
+            <a href="/organization/<%= org.organization_id %>">
+                <%= org.name %>
+            </a>
+        </h2>
+
+        <p><%= org.description %></p>
+
+        <p>
+            <strong>Email:</strong>
+            <%= org.contact_email %>
+        </p>
+
+    </div>
+
+<% }) %>

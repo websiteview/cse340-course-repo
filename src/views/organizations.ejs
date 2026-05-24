@@ -11,12 +11,16 @@
             <div class="organization-card">
 
                 <img 
-                    src="/images/<%= org.logo_filename %>" 
+                    src="/images/<%= org.logo_filename || 'default.png' %>" 
                     alt="<%= org.name %> logo"
                     width="200"
                 >
 
-                <h2><%= org.name %></h2>
+                <h2>
+                    <a href="/organization/<%= org.organization_id %>">
+                        <%= org.name %>
+                    </a>
+                </h2>
 
                 <p><%= org.description %></p>
 
