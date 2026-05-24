@@ -1,27 +1,73 @@
-<% organizations.forEach(org => { %>
+<%- include('partials/header') %>
+
+<main>
 
     <div class="organization-card">
 
-        <img 
-        
-            src="/images/<%= org.logo_filename %>" 
-            alt="<%= org.name %> logo"
+        <img
+            src="/images/<%= organization.logo_filename %>"
+            alt="<%= organization.name %> logo"
             width="200"
         >
 
-        <h2>
-            <a href="/organization/<%= org.organization_id %>">
-                <%= org.name %>
-            </a>
-        </h2>
+        <h1><%= organization.name %></h1>
 
-        <p><%= org.description %></p>
+        <p><%= organization.description %></p>
 
         <p>
             <strong>Email:</strong>
-            <%= org.contact_email %>
+            <%= organization.contact_email %>
         </p>
 
     </div>
 
-<% }) %>
+    <h2>Service Projects</h2>
+
+    <div class="projects-container">
+
+        <% if (projects.length > 0) { %>
+
+            <% projects.forEach(project => { %>
+
+                <div class="project-card">
+
+                    <h3>
+                        <a href="/project/<%= project.project_id %>">
+                            <%= project.title %>
+                        </a>
+                    </h3>
+
+                    <p>
+                        <strong>Location:</strong>
+                        <%= project.location %>
+                    </p>
+
+                    <p>
+                        <strong>Date:</strong>
+
+                        <%= new Date(project.project_date).toLocaleDateString(
+                            'en-US',
+                            {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            }
+                        ) %>
+
+                    </p>
+
+                </div>
+
+            <% }) %>
+
+        <% } else { %>
+
+            <p>No projects found for this organization.</p>
+
+        <% } %>
+
+    </div>
+
+</main>
+
+<%- include('partials/footer') %>
