@@ -35,10 +35,10 @@ const showOrganizationDetailsPage = async (req, res) => {
     const title = 'Organization Details';
 
     res.render('organization', {
-        title,
-        organizationDetails,
-        projects
-    });
+    title,
+    organization: organizationDetails,
+    projects
+});
 
 };
 
