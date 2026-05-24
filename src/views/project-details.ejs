@@ -42,16 +42,28 @@
 
             <h3>Categories</h3>
 
-            <% categories.forEach(category => { %>
+            <% if (categories.length > 0) { %>
 
-                <a
-                    class="category-tag"
-                    href="/category/<%= category.category_id %>"
-                >
-                    <%= category.name %>
-                </a>
+                <% categories.forEach(category => { %>
 
-            <% }) %>
+                    <p>
+
+                        <a
+                            class="category-tag"
+                            href="/category/<%= category.category_id %>"
+                        >
+                            <%= category.name %>
+                        </a>
+
+                    </p>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <p>No categories assigned.</p>
+
+            <% } %>
 
         </div>
 
