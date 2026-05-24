@@ -10,7 +10,11 @@
 
             <div class="project-card">
 
-                <h2><%= project.title %></h2>
+                <h2>
+    <a href="/project/<%= project.project_id %>">
+        <%= project.title %>
+    </a>
+</h2>
 
                 <p>
                     <strong>Organization:</strong>
