@@ -9,7 +9,10 @@ import {
 
 import { showProjectsPage } from './controllers/projects.js';
 
-import { showCategoriesPage } from './controllers/categories.js';
+import {
+    showCategoriesPage,
+    showCategoryDetailsPage
+} from './controllers/categories.js';
 
 import { testErrorPage } from './controllers/errors.js';
 
@@ -33,6 +36,9 @@ router.get('/projects', showProjectsPage);
 
 /* Categories */
 router.get('/categories', showCategoriesPage);
+
+/* Single category details */
+router.get('/category/:id', showCategoryDetailsPage);
 
 /* =========================
    ERROR TEST ROUTE
