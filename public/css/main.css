@@ -1,13 +1,20 @@
-html, body {
+html,
+body {
     background-color: lightblue;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
+    color: #222;
 }
+
+/* =========================
+   NAVIGATION
+========================= */
 
 nav ul {
     list-style-type: none;
     padding: 0;
+    margin-bottom: 30px;
 }
 
 nav li {
@@ -23,4 +30,91 @@ nav a {
 
 nav a:hover {
     color: #0066cc;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+
+h1,
+h2,
+h3 {
+    color: #1a1a1a;
+}
+
+/* =========================
+   CONTAINERS
+========================= */
+
+.projects-container,
+.categories-container,
+.organizations-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.project-card,
+.category-card,
+.organization-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   LINKS
+========================= */
+
+a {
+    color: #0066cc;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   CATEGORY TAGS
+========================= */
+
+.category-tag {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 5px;
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+.category-tag:hover {
+    background-color: #cfcfcf;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .projects-container,
+    .categories-container,
+    .organizations-container {
+        flex-direction: column;
+    }
+
+    .project-card,
+    .category-card,
+    .organization-card {
+        width: 100%;
+    }
+
 }
