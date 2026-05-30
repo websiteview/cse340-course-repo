@@ -1,10 +1,14 @@
 import express from 'express';
 
+console.log('🔥 ROUTES.JS IS LOADED'); 
+
 import { showHomePage } from './controllers/index.js';
 
 import {
     showOrganizationsPage,
-    showOrganizationDetailsPage
+    showOrganizationDetailsPage,
+    showNewOrganizationForm,
+    processNewOrganizationForm
 } from './controllers/organizations.js';
 
 import {
@@ -28,22 +32,40 @@ const router = express.Router();
 /* Home page */
 router.get('/', showHomePage);
 
-/* Organizations */
+/* =========================
+   ORGANIZATIONS
+========================= */
+
 router.get('/organizations', showOrganizationsPage);
 
-/* Single organization details */
 router.get('/organization/:id', showOrganizationDetailsPage);
 
-/* Projects */
+/* 🆕 NEW ORGANIZATION FORM (GET) */
+router.get('/new-organization', showNewOrganizationForm);
+
+
+/* 🆕 CREATE ORGANIZATION (POST) */
+router.post('/new-organization', processNewOrganizationForm);
+
+router.get('/new-organization', (req, res) => {
+    console.log('ROUTE HIT: new-organization');
+    res.send('IT WORKS');
+});
+
+/* =========================
+   PROJECTS
+========================= */
+
 router.get('/projects', showProjectsPage);
 
-/* Single project details */
 router.get('/project/:id', showProjectDetailsPage);
 
-/* Categories */
+/* =========================
+   CATEGORIES
+========================= */
+
 router.get('/categories', showCategoriesPage);
 
-/* Single category details */
 router.get('/category/:id', showCategoryDetailsPage);
 
 /* =========================
