@@ -1,0 +1,80 @@
+<%- include('partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    <% const messages = flash(); %>
+    <% Object.keys(messages).forEach(type => { %>
+        <% messages[type].forEach(msg => { %>
+            <div class="alert <%= type %>"><%= msg %></div>
+        <% }) %>
+    <% }) %>
+
+    <form action="/edit-project/<%= project.project_id %>" method="POST">
+
+        <!-- ORGANIZATION -->
+        <div>
+            <label>Organization</label>
+            <select name="organizationId" required>
+
+                <% organizations.forEach(org => { %>
+
+                    <option 
+                        value="<%= org.organization_id %>"
+                        <%= org.organization_id === project.organization_id ? 'selected' : '' %>
+                    >
+                        <%= org.name %>
+                    </option>
+
+                <% }) %>
+
+            </select>
+        </div>
+
+        <!-- TITLE -->
+        <div>
+            <label>Title</label>
+            <input 
+                type="text"
+                name="title"
+                value="<%= project.title %>"
+                required
+            >
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div>
+            <label>Description</label>
+            <textarea name="description" required><%= project.description %></textarea>
+        </div>
+
+        <!-- LOCATION -->
+        <div>
+            <label>Location</label>
+            <input 
+                type="text"
+                name="location"
+                value="<%= project.location %>"
+                required
+            >
+        </div>
+
+        <!-- DATE -->
+        <div>
+            <label>Date</label>
+            <input 
+                type="date"
+                name="projectDate"
+                value="<%= new Date(project.project_date).toISOString().split('T')[0] %>"
+                required
+            >
+        </div>
+
+        <button type="submit">Update Project</button>
+
+    </form>
+
+</main>
+
+<%- include('partials/footer') %>

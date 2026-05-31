@@ -68,10 +68,37 @@ const createOrganization = async (name, description, contactEmail, logoFilename)
 };
 
 /* =========================
+   UPDATE ORGANIZATION (STEP 5)
+========================= */
+const updateOrganization = async (id, name, description, contactEmail, logoFilename) => {
+
+    const query = `
+        UPDATE organization
+        SET name = $1,
+            description = $2,
+            contact_email = $3,
+            logo_filename = $4
+        WHERE organization_id = $5
+        RETURNING organization_id;
+    `;
+
+    const queryParams = [name, description, contactEmail, logoFilename, id];
+
+    const result = await db.query(query, queryParams);
+
+    if (!result.rows || result.rows.length === 0) {
+        throw new Error('Failed to update organization');
+    }
+
+    return result.rows[0].organization_id;
+};
+
+/* =========================
    EXPORTS
 ========================= */
 export {
     getAllOrganizations,
     getOrganizationDetails,
-    createOrganization
+    createOrganization,
+    updateOrganization
 };

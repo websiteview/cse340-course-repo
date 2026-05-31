@@ -1,6 +1,6 @@
 import express from 'express';
 
-console.log('🔥 ROUTES.JS IS LOADED'); 
+console.log('🔥 ROUTES.JS IS LOADED');
 
 import { showHomePage } from './controllers/index.js';
 
@@ -8,17 +8,33 @@ import {
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,
-    processNewOrganizationForm
+    processNewOrganizationForm,
+    organizationValidation,
+    showEditOrganizationForm,
+    processEditOrganizationForm
 } from './controllers/organizations.js';
 
 import {
     showProjectsPage,
-    showProjectDetailsPage
+    showProjectDetailsPage,
+    showNewProjectForm,
+    processNewProjectForm,
+    projectValidation
 } from './controllers/projects.js';
 
 import {
     showCategoriesPage,
-    showCategoryDetailsPage
+    showCategoryDetailsPage,
+    showAssignCategoriesForm,
+    processAssignCategoriesForm,
+
+    // NEW CATEGORY CRUD
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm,
+    categoryValidation
+
 } from './controllers/categories.js';
 
 import { testErrorPage } from './controllers/errors.js';
@@ -26,10 +42,8 @@ import { testErrorPage } from './controllers/errors.js';
 const router = express.Router();
 
 /* =========================
-   ROUTES
+   HOME
 ========================= */
-
-/* Home page */
 router.get('/', showHomePage);
 
 /* =========================
@@ -40,17 +54,27 @@ router.get('/organizations', showOrganizationsPage);
 
 router.get('/organization/:id', showOrganizationDetailsPage);
 
-/* 🆕 NEW ORGANIZATION FORM (GET) */
+/* =========================
+   NEW ORGANIZATION
+========================= */
 router.get('/new-organization', showNewOrganizationForm);
 
+router.post(
+    '/new-organization',
+    organizationValidation,
+    processNewOrganizationForm
+);
 
-/* 🆕 CREATE ORGANIZATION (POST) */
-router.post('/new-organization', processNewOrganizationForm);
+/* =========================
+   EDIT ORGANIZATION
+========================= */
+router.get('/edit-organization/:id', showEditOrganizationForm);
 
-router.get('/new-organization', (req, res) => {
-    console.log('ROUTE HIT: new-organization');
-    res.send('IT WORKS');
-});
+router.post(
+    '/edit-organization/:id',
+    organizationValidation,
+    processEditOrganizationForm
+);
 
 /* =========================
    PROJECTS
@@ -60,6 +84,29 @@ router.get('/projects', showProjectsPage);
 
 router.get('/project/:id', showProjectDetailsPage);
 
+/* NEW PROJECT */
+router.get('/new-project', showNewProjectForm);
+
+router.post(
+    '/new-project',
+    projectValidation,
+    processNewProjectForm
+);
+
+/* =========================
+   ASSIGN CATEGORIES
+========================= */
+
+router.get(
+    '/project/:projectId/assign-categories',
+    showAssignCategoriesForm
+);
+
+router.post(
+    '/project/:projectId/assign-categories',
+    processAssignCategoriesForm
+);
+
 /* =========================
    CATEGORIES
 ========================= */
@@ -67,6 +114,36 @@ router.get('/project/:id', showProjectDetailsPage);
 router.get('/categories', showCategoriesPage);
 
 router.get('/category/:id', showCategoryDetailsPage);
+
+/* =========================
+   NEW CATEGORY
+========================= */
+
+router.get(
+    '/new-category',
+    showNewCategoryForm
+);
+
+router.post(
+    '/new-category',
+    categoryValidation,
+    processNewCategoryForm
+);
+
+/* =========================
+   EDIT CATEGORY
+========================= */
+
+router.get(
+    '/edit-category/:id',
+    showEditCategoryForm
+);
+
+router.post(
+    '/edit-category/:id',
+    categoryValidation,
+    processEditCategoryForm
+);
 
 /* =========================
    ERROR TEST ROUTE

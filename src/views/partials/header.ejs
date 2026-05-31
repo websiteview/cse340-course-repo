@@ -22,20 +22,24 @@
          FLASH MESSAGES (STEP 5)
     ========================== -->
 
-    <% const messages = flash(); %>
+    <% if (typeof flash !== 'undefined') { %>
 
-    <% Object.keys(messages).forEach(type => { %>
+        <% const messages = flash(); %>
 
-        <% if (messages[type] && messages[type].length > 0) { %>
+        <% Object.keys(messages).forEach(type => { %>
 
-            <div class="alert <%= type %>">
+            <% if (messages[type] && messages[type].length > 0) { %>
 
-                <% messages[type].forEach(msg => { %>
-                    <p><%= msg %></p>
-                <% }); %>
+                <div class="alert <%= type %>">
 
-            </div>
+                    <% messages[type].forEach(msg => { %>
+                        <p><%= msg %></p>
+                    <% }); %>
 
-        <% } %>
+                </div>
 
-    <% }); %>
+            <% } %>
+
+        <% }); %>
+
+    <% } %>

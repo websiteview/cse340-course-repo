@@ -41,7 +41,7 @@ app.use(express.json());
 app.use(session({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: false, // 🔥 mejor práctica (evita sesiones vacías)
+    saveUninitialized: false, // 
     cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
 }));
 

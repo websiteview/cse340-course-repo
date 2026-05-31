@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    <h2><%= project.title %></h2>
+
+    <!-- FLASH MESSAGES -->
+    <% const messages = flash(); %>
+    <% Object.keys(messages).forEach(type => { %>
+        <% messages[type].forEach(msg => { %>
+            <div class="alert <%= type %>">
+                <%= msg %>
+            </div>
+        <% }) %>
+    <% }) %>
+
+    <form action="/project/<%= project.project_id %>/assign-categories" method="POST">
+
+        <h3>Select Categories</h3>
+
+        <% categories.forEach(category => { %>
+
+            <div>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="categories"
+                        value="<%= category.category_id %>"
+                        
+                        <% if (assignedCategories.some(ac => ac.category_id === category.category_id)) { %>
+                            checked
+                        <% } %>
+                    >
+
+                    <%= category.name %>
+
+                </label>
+
+            </div>
+
+        <% }) %>
+
+        <br>
+
+        <button type="submit">Save Categories</button>
+
+    </form>
+
+    <br>
+
+    <a href="/project/<%= project.project_id %>">
+        ← Back to Project
+    </a>
+
+</main>
+
+<%- include('partials/footer') %>

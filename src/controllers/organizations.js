@@ -1,12 +1,45 @@
-import {
+import { 
     getAllOrganizations,
     getOrganizationDetails,
-    createOrganization
+    createOrganization,
+    updateOrganization
 } from '../models/organizations.js';
 
 import {
     getProjectsByOrganizationId
 } from '../models/projects.js';
+
+import {
+    body,
+    validationResult
+} from 'express-validator';
+
+/* =========================
+   VALIDATION RULES
+========================= */
+const organizationValidation = [
+    body('name')
+        .trim()
+        .notEmpty()
+        .withMessage('Organization name is required')
+        .isLength({ min: 3, max: 150 })
+        .withMessage('Organization name must be between 3 and 150 characters'),
+
+    body('description')
+        .trim()
+        .notEmpty()
+        .withMessage('Organization description is required')
+        .isLength({ max: 500 })
+        .withMessage('Organization description cannot exceed 500 characters'),
+
+    body('contactEmail')
+        .trim()
+        .normalizeEmail()
+        .notEmpty()
+        .withMessage('Contact email is required')
+        .isEmail()
+        .withMessage('Please provide a valid email address')
+];
 
 /* =========================
    SHOW ALL ORGANIZATIONS
@@ -46,7 +79,73 @@ const showOrganizationDetailsPage = async (req, res) => {
 };
 
 /* =========================
-   NEW ORGANIZATION FORM (GET)
+   SHOW EDIT FORM (STEP 2)
+========================= */
+const showEditOrganizationForm = async (req, res) => {
+
+    const organizationId = req.params.id;
+
+    const organizationDetails = await getOrganizationDetails(organizationId);
+
+    if (!organizationDetails) {
+        req.flash('error', 'Organization not found');
+        return res.redirect('/organizations');
+    }
+
+    const title = 'Edit Organization';
+
+    res.render('edit-organization', {
+        title,
+        organization: organizationDetails
+    });
+};
+
+/* =========================
+   PROCESS EDIT FORM (STEP 3 - REQUIRED)
+========================= */
+const processEditOrganizationForm = async (req, res) => {
+
+    const organizationId = req.params.id;
+
+    const results = validationResult(req);
+
+    if (!results.isEmpty()) {
+
+        results.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        return res.redirect(`/edit-organization/${organizationId}`);
+    }
+
+    try {
+
+        const { name, description, contactEmail, logoFilename } = req.body;
+
+        await updateOrganization(
+            organizationId,
+            name,
+            description,
+            contactEmail,
+            logoFilename || 'placeholder-logo.png'
+        );
+
+        req.flash('success', 'Organization updated successfully!');
+
+        return res.redirect(`/organization/${organizationId}`);
+
+    } catch (error) {
+
+        console.error('UPDATE ORGANIZATION ERROR:', error);
+
+        req.flash('error', 'Error updating organization');
+
+        return res.redirect(`/edit-organization/${organizationId}`);
+    }
+};
+
+/* =========================
+   NEW ORGANIZATION FORM
 ========================= */
 const showNewOrganizationForm = async (req, res) => {
 
@@ -56,15 +155,24 @@ const showNewOrganizationForm = async (req, res) => {
 };
 
 /* =========================
-   PROCESS FORM (POST) + FLASH
+   PROCESS NEW ORGANIZATION FORM
 ========================= */
 const processNewOrganizationForm = async (req, res) => {
+
+    const results = validationResult(req);
+
+    if (!results.isEmpty()) {
+
+        results.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        return res.redirect('/new-organization');
+    }
 
     try {
 
         const { name, description, contactEmail } = req.body;
-
-        console.log('FORM DATA:', req.body);
 
         const logoFilename = 'placeholder-logo.png';
 
@@ -75,12 +183,8 @@ const processNewOrganizationForm = async (req, res) => {
             logoFilename
         );
 
-        console.log('CREATED ID:', organizationId);
-
-        // 🔥 FLASH MESSAGE (STEP 5)
         req.flash('success', 'Organization added successfully!');
 
-        // 🔥 PRG PATTERN (IMPORTANT FIX)
         return res.redirect(`/organization/${organizationId}`);
 
     } catch (error) {
@@ -100,5 +204,8 @@ export {
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,
-    processNewOrganizationForm
+    showEditOrganizationForm,
+    processNewOrganizationForm,
+    processEditOrganizationForm,
+    organizationValidation
 };

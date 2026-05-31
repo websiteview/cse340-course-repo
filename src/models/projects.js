@@ -1,6 +1,8 @@
 import db from './db.js';
 
-/* Get all projects */
+/* =========================
+   GET ALL PROJECTS
+========================= */
 const getAllProjects = async () => {
 
     const query = `
@@ -20,10 +22,11 @@ const getAllProjects = async () => {
     const result = await db.query(query);
 
     return result.rows;
-
 };
 
-/* Get projects by organization ID */
+/* =========================
+   GET PROJECTS BY ORGANIZATION ID
+========================= */
 const getProjectsByOrganizationId = async (organizationId) => {
 
     const query = `
@@ -39,15 +42,14 @@ const getProjectsByOrganizationId = async (organizationId) => {
         ORDER BY project_date;
     `;
 
-    const queryParams = [organizationId];
-
-    const result = await db.query(query, queryParams);
+    const result = await db.query(query, [organizationId]);
 
     return result.rows;
-
 };
 
-/* Get single project by ID */
+/* =========================
+   GET SINGLE PROJECT BY ID
+========================= */
 const getProjectById = async (projectId) => {
 
     const query = `
@@ -65,16 +67,49 @@ const getProjectById = async (projectId) => {
         WHERE p.project_id = $1;
     `;
 
-    const queryParams = [projectId];
+    const result = await db.query(query, [projectId]);
 
-    const result = await db.query(query, queryParams);
-
-    return result.rows[0];
-
+    return result.rows.length > 0 ? result.rows[0] : null;
 };
 
+/* =========================
+   CREATE PROJECT (STEP 1)
+========================= */
+const createProject = async (title, description, location, date, organizationId) => {
+
+    const query = `
+        INSERT INTO project (
+            title,
+            description,
+            location,
+            project_date,
+            organization_id
+        )
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING project_id;
+    `;
+
+    const result = await db.query(query, [
+        title,
+        description,
+        location,
+        date,
+        organizationId
+    ]);
+
+    if (!result.rows || result.rows.length === 0) {
+        throw new Error('Failed to create project');
+    }
+
+    return result.rows[0].project_id;
+};
+
+/* =========================
+   EXPORTS
+========================= */
 export {
     getAllProjects,
     getProjectsByOrganizationId,
-    getProjectById
+    getProjectById,
+    createProject
 };
