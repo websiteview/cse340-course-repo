@@ -5,6 +5,14 @@ console.log('🔥 ROUTES.JS IS LOADED');
 import { showHomePage } from './controllers/index.js';
 
 import {
+    showUserRegistrationForm,
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout
+} from './controllers/users.js';
+
+import {
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,
@@ -44,7 +52,45 @@ const router = express.Router();
 /* =========================
    HOME
 ========================= */
+
 router.get('/', showHomePage);
+
+/* =========================
+   USER REGISTRATION
+========================= */
+
+router.get(
+    '/register',
+    showUserRegistrationForm
+);
+
+router.post(
+    '/register',
+    processUserRegistrationForm
+);
+
+/* =========================
+   USER LOGIN
+========================= */
+
+router.get(
+    '/login',
+    showLoginForm
+);
+
+router.post(
+    '/login',
+    processLoginForm
+);
+
+/* =========================
+   USER LOGOUT
+========================= */
+
+router.get(
+    '/logout',
+    processLogout
+);
 
 /* =========================
    ORGANIZATIONS
@@ -57,6 +103,7 @@ router.get('/organization/:id', showOrganizationDetailsPage);
 /* =========================
    NEW ORGANIZATION
 ========================= */
+
 router.get('/new-organization', showNewOrganizationForm);
 
 router.post(
@@ -68,6 +115,7 @@ router.post(
 /* =========================
    EDIT ORGANIZATION
 ========================= */
+
 router.get('/edit-organization/:id', showEditOrganizationForm);
 
 router.post(
@@ -84,7 +132,10 @@ router.get('/projects', showProjectsPage);
 
 router.get('/project/:id', showProjectDetailsPage);
 
-/* NEW PROJECT */
+/* =========================
+   NEW PROJECT
+========================= */
+
 router.get('/new-project', showNewProjectForm);
 
 router.post(
