@@ -9,7 +9,9 @@ import {
     processUserRegistrationForm,
     showLoginForm,
     processLoginForm,
-    processLogout
+    processLogout,
+    requireLogin,
+    showDashboard
 } from './controllers/users.js';
 
 import {
@@ -90,6 +92,16 @@ router.post(
 router.get(
     '/logout',
     processLogout
+);
+
+/* =========================
+   DASHBOARD (PROTECTED)
+========================= */
+
+router.get(
+    '/dashboard',
+    requireLogin,
+    showDashboard
 );
 
 /* =========================

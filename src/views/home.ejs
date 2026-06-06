@@ -1,13 +1,34 @@
 <%- include('partials/header') %>
 
 <main>
+
     <h1><%= title %></h1>
 
     <h2>Welcome to the CSE 340 Service Network!</h2>
 
-    <p>Our mission is to connect volunteers with service opportunities.</p>
+    <p>
+        Our mission is to connect volunteers with service opportunities.
+    </p>
 
-    <img src="/images/cse340-service-network.png" width="300" alt="Service Network">
+    <img
+        src="/images/cse340-service-network.png"
+        width="300"
+        alt="Service Network"
+    >
+
+    <!-- =========================
+         DASHBOARD LINK
+    ========================== -->
+
+    <% if (isLoggedIn) { %>
+
+        <p>
+            <a href="/dashboard">
+                My Dashboard
+            </a>
+        </p>
+
+    <% } %>
 
 </main>
 

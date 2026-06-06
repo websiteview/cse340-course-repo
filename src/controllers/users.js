@@ -96,7 +96,8 @@ const processLoginForm = async (req, res) => {
             user
         );
 
-        return res.redirect('/');
+        // UPDATED FOR PROTECTED ROUTES ACTIVITY
+        return res.redirect('/dashboard');
     }
 
     req.flash(
@@ -124,10 +125,59 @@ const processLogout = async (
 
 };
 
+/* =========================
+   AUTHORIZATION MIDDLEWARE
+========================= */
+
+const requireLogin = (
+    req,
+    res,
+    next
+) => {
+
+    if (!req.session.user) {
+
+        req.flash(
+            'error',
+            'You must be logged in to access that page.'
+        );
+
+        return res.redirect('/login');
+    }
+
+    next();
+};
+
+/* =========================
+   DASHBOARD
+========================= */
+
+const showDashboard = (
+    req,
+    res
+) => {
+
+    const {
+        name,
+        email
+    } = req.session.user;
+
+    res.render(
+        'dashboard',
+        {
+            title: 'Dashboard',
+            name,
+            email
+        }
+    );
+};
+
 export {
     showUserRegistrationForm,
     processUserRegistrationForm,
     showLoginForm,
     processLoginForm,
-    processLogout
+    processLogout,
+    requireLogin,
+    showDashboard
 };
