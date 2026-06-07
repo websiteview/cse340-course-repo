@@ -69,13 +69,21 @@ const getProjectById = async (projectId) => {
 
     const result = await db.query(query, [projectId]);
 
-    return result.rows.length > 0 ? result.rows[0] : null;
+    return result.rows.length > 0
+        ? result.rows[0]
+        : null;
 };
 
 /* =========================
-   CREATE PROJECT (STEP 1)
+   CREATE PROJECT
 ========================= */
-const createProject = async (title, description, location, date, organizationId) => {
+const createProject = async (
+    title,
+    description,
+    location,
+    date,
+    organizationId
+) => {
 
     const query = `
         INSERT INTO project (
@@ -97,8 +105,58 @@ const createProject = async (title, description, location, date, organizationId)
         organizationId
     ]);
 
-    if (!result.rows || result.rows.length === 0) {
-        throw new Error('Failed to create project');
+    if (
+        !result.rows ||
+        result.rows.length === 0
+    ) {
+        throw new Error(
+            'Failed to create project'
+        );
+    }
+
+    return result.rows[0].project_id;
+};
+
+/* =========================
+   UPDATE PROJECT
+========================= */
+const updateProject = async (
+    projectId,
+    title,
+    description,
+    location,
+    date,
+    organizationId
+) => {
+
+    const query = `
+        UPDATE project
+        SET
+            title = $1,
+            description = $2,
+            location = $3,
+            project_date = $4,
+            organization_id = $5
+        WHERE project_id = $6
+        RETURNING project_id;
+    `;
+
+    const result = await db.query(query, [
+        title,
+        description,
+        location,
+        date,
+        organizationId,
+        projectId
+    ]);
+
+    if (
+        !result.rows ||
+        result.rows.length === 0
+    ) {
+        throw new Error(
+            'Failed to update project'
+        );
     }
 
     return result.rows[0].project_id;
@@ -111,5 +169,6 @@ export {
     getAllProjects,
     getProjectsByOrganizationId,
     getProjectById,
-    createProject
+    createProject,
+    updateProject
 };

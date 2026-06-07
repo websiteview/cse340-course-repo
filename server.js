@@ -66,12 +66,18 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
 
     res.locals.isLoggedIn = false;
+    res.locals.user = null;
 
     if (
         req.session &&
         req.session.user
     ) {
+
         res.locals.isLoggedIn = true;
+
+        // Make current user available
+        // to all EJS templates
+        res.locals.user = req.session.user;
     }
 
     res.locals.NODE_ENV = NODE_ENV;

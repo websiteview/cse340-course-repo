@@ -38,19 +38,23 @@
 
         </p>
 
-        <!-- ✅ NEW: EDIT PROJECT LINK -->
-        <p>
-            <a href="/edit-project/<%= project.project_id %>">
-                Edit Project
-            </a>
-        </p>
+        <% if (user && user.role_name === 'admin') { %>
 
-        <!-- ✅ NEW: ASSIGN CATEGORIES LINK (STEP 5) -->
-        <p>
-            <a href="/project/<%= project.project_id %>/assign-categories">
-                Edit Categories
-            </a>
-        </p>
+    <!-- EDIT PROJECT LINK -->
+    <p>
+        <a href="/edit-project/<%= project.project_id %>">
+            Edit Project
+        </a>
+    </p>
+
+    <!-- ASSIGN CATEGORIES LINK -->
+    <p>
+        <a href="/project/<%= project.project_id %>/assign-categories">
+            Edit Categories
+        </a>
+    </p>
+
+<% } %>
 
         <div class="categories-container">
 

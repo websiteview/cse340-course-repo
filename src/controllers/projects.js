@@ -2,7 +2,8 @@
 import {
     getAllProjects,
     getProjectById,
-    createProject
+    createProject,
+    updateProject
 } from '../models/projects.js';
 
 import {
@@ -132,7 +133,7 @@ const processNewProjectForm = async (req, res) => {
             organizationId
         } = req.body;
 
-        const projectId = await createProject(
+        await createProject(
             title,
             description,
             location,
@@ -155,7 +156,7 @@ const processNewProjectForm = async (req, res) => {
 };
 
 /* =========================
-   SHOW EDIT PROJECT FORM (STEP 2)
+   SHOW EDIT PROJECT FORM
 ========================= */
 const showEditProjectForm = async (req, res) => {
 
@@ -164,7 +165,9 @@ const showEditProjectForm = async (req, res) => {
     const project = await getProjectById(projectId);
 
     if (!project) {
+
         req.flash('error', 'Project not found');
+
         return res.redirect('/projects');
     }
 
@@ -180,7 +183,7 @@ const showEditProjectForm = async (req, res) => {
 };
 
 /* =========================
-   PROCESS EDIT PROJECT FORM (STEP 2)
+   PROCESS EDIT PROJECT FORM
 ========================= */
 const processEditProjectForm = async (req, res) => {
 
@@ -207,7 +210,6 @@ const processEditProjectForm = async (req, res) => {
             organizationId
         } = req.body;
 
-        // IMPORTANT: you will add updateProject in next step (model)
         await updateProject(
             projectId,
             title,
@@ -217,17 +219,28 @@ const processEditProjectForm = async (req, res) => {
             organizationId
         );
 
-        req.flash('success', 'Project updated successfully!');
+        req.flash(
+            'success',
+            'Project updated successfully!'
+        );
 
         return res.redirect(`/project/${projectId}`);
 
     } catch (error) {
 
-        console.error('UPDATE PROJECT ERROR:', error);
+        console.error(
+            'UPDATE PROJECT ERROR:',
+            error
+        );
 
-        req.flash('error', 'Error updating project');
+        req.flash(
+            'error',
+            'Error updating project'
+        );
 
-        return res.redirect(`/edit-project/${projectId}`);
+        return res.redirect(
+            `/edit-project/${projectId}`
+        );
     }
 };
 

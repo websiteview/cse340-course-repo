@@ -4,7 +4,11 @@
 
     <h1><%= title %></h1>
 
-    <a href="/new-project">➕ Add New Project</a>
+    <% if (user && user.role_name === 'admin') { %>
+
+        <a href="/new-project">➕ Add New Project</a>
+
+    <% } %>
 
     <div class="projects-container">
 
@@ -13,10 +17,10 @@
             <div class="project-card">
 
                 <h2>
-    <a href="/project/<%= project.project_id %>">
-        <%= project.title %>
-    </a>
-</h2>
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.title %>
+                    </a>
+                </h2>
 
                 <p>
                     <strong>Organization:</strong>

@@ -2,7 +2,10 @@
 
 <main>
 
-    <h1><%= title %></h1>
+
+<h1><%= title %></h1>
+
+<% if (user && user.role_name === 'admin') { %>
 
     <p>
         <a href="/new-category">
@@ -10,29 +13,36 @@
         </a>
     </p>
 
-    <div class="categories-container">
+<% } %>
 
-        <% categories.forEach(category => { %>
+<div class="categories-container">
 
-            <div class="category-card">
+    <% categories.forEach(category => { %>
 
-                <h2>
-                    <a href="/category/<%= category.category_id %>">
-                        <%= category.name %>
-                    </a>
-                </h2>
+        <div class="category-card">
+
+            <h2>
+                <a href="/category/<%= category.category_id %>">
+                    <%= category.name %>
+                </a>
+            </h2>
+
+            <% if (user && user.role_name === 'admin') { %>
 
                 <p>
                     <a href="/edit-category/<%= category.category_id %>">
-                         Edit Category
+                        Edit Category
                     </a>
                 </p>
 
-            </div>
+            <% } %>
 
-        <% }) %>
+        </div>
 
-    </div>
+    <% }) %>
+
+</div>
+
 
 </main>
 

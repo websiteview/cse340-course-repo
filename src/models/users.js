@@ -1,7 +1,16 @@
 import db from './db.js';
 import bcrypt from 'bcrypt';
 
-const createUser = async (name, email, passwordHash) => {
+/* =========================
+   CREATE USER
+========================= */
+
+const createUser = async (
+    name,
+    email,
+    passwordHash
+) => {
+
     const sql = `
         INSERT INTO users
         (
@@ -28,17 +37,25 @@ const createUser = async (name, email, passwordHash) => {
     return result.rows[0];
 };
 
-const findUserByEmail = async (email) => {
+/* =========================
+   FIND USER BY EMAIL
+========================= */
+
+const findUserByEmail = async (
+    email
+) => {
 
     const query = `
         SELECT
-            user_id,
-            name,
-            email,
-            password_hash,
-            role_id
-        FROM users
-        WHERE email = $1
+            u.user_id,
+            u.name,
+            u.email,
+            u.password_hash,
+            r.role_name
+        FROM users u
+        JOIN roles r
+            ON u.role_id = r.role_id
+        WHERE u.email = $1
     `;
 
     const queryParams = [email];
@@ -55,22 +72,33 @@ const findUserByEmail = async (email) => {
     return result.rows[0];
 };
 
+/* =========================
+   VERIFY PASSWORD
+========================= */
+
 const verifyPassword = async (
     password,
     passwordHash
 ) => {
+
     return bcrypt.compare(
         password,
         passwordHash
     );
 };
 
+/* =========================
+   AUTHENTICATE USER
+========================= */
+
 const authenticateUser = async (
     email,
     password
 ) => {
 
-    const user = await findUserByEmail(email);
+    const user = await findUserByEmail(
+        email
+    );
 
     if (!user) {
         return null;

@@ -4,11 +4,15 @@
 
     <h1><%= title %></h1>
 
-    <p>
-        <a href="/new-organization" class="btn">
-            ➕ Add New Organization
-        </a>
-    </p>
+    <% if (user && user.role_name === 'admin') { %>
+
+        <p>
+            <a href="/new-organization" class="btn">
+                ➕ Add New Organization
+            </a>
+        </p>
+
+    <% } %>
 
     <div class="organizations-container">
 
@@ -16,8 +20,8 @@
 
             <div class="organization-card">
 
-                <img 
-                    src="/images/<%= org.logo_filename || 'default.png' %>" 
+                <img
+                    src="/images/<%= org.logo_filename || 'default.png' %>"
                     alt="<%= org.name %> logo"
                     width="200"
                 >

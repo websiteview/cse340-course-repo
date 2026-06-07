@@ -96,7 +96,6 @@ const processLoginForm = async (req, res) => {
             user
         );
 
-        // UPDATED FOR PROTECTED ROUTES ACTIVITY
         return res.redirect('/dashboard');
     }
 
@@ -126,7 +125,7 @@ const processLogout = async (
 };
 
 /* =========================
-   AUTHORIZATION MIDDLEWARE
+   REQUIRE LOGIN
 ========================= */
 
 const requireLogin = (
@@ -146,6 +145,37 @@ const requireLogin = (
     }
 
     next();
+};
+
+/* =========================
+   REQUIRE ROLE
+========================= */
+
+const requireRole = (
+    role
+) => {
+
+    return (
+        req,
+        res,
+        next
+    ) => {
+
+        if (
+            req.session.user &&
+            req.session.user.role_name === role
+        ) {
+
+            return next();
+        }
+
+        req.flash(
+            'error',
+            'You do not have permission to access that page.'
+        );
+
+        return res.redirect('/');
+    };
 };
 
 /* =========================
@@ -179,5 +209,6 @@ export {
     processLoginForm,
     processLogout,
     requireLogin,
+    requireRole,
     showDashboard
 };
