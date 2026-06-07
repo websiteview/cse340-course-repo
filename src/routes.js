@@ -5,46 +5,47 @@ console.log('🔥 ROUTES.JS IS LOADED');
 import { showHomePage } from './controllers/index.js';
 
 import {
-showUserRegistrationForm,
-processUserRegistrationForm,
-showLoginForm,
-processLoginForm,
-processLogout,
-requireLogin,
-requireRole,
-showDashboard
+    showUserRegistrationForm,
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout,
+    requireLogin,
+    requireRole,
+    showDashboard,
+    showUsersPage
 } from './controllers/users.js';
 
 import {
-showOrganizationsPage,
-showOrganizationDetailsPage,
-showNewOrganizationForm,
-processNewOrganizationForm,
-organizationValidation,
-showEditOrganizationForm,
-processEditOrganizationForm
+    showOrganizationsPage,
+    showOrganizationDetailsPage,
+    showNewOrganizationForm,
+    processNewOrganizationForm,
+    organizationValidation,
+    showEditOrganizationForm,
+    processEditOrganizationForm
 } from './controllers/organizations.js';
 
 import {
-showProjectsPage,
-showProjectDetailsPage,
-showNewProjectForm,
-processNewProjectForm,
-showEditProjectForm,
-processEditProjectForm,
-projectValidation
+    showProjectsPage,
+    showProjectDetailsPage,
+    showNewProjectForm,
+    processNewProjectForm,
+    showEditProjectForm,
+    processEditProjectForm,
+    projectValidation
 } from './controllers/projects.js';
 
 import {
-showCategoriesPage,
-showCategoryDetailsPage,
-showAssignCategoriesForm,
-processAssignCategoriesForm,
-showNewCategoryForm,
-processNewCategoryForm,
-showEditCategoryForm,
-processEditCategoryForm,
-categoryValidation
+    showCategoriesPage,
+    showCategoryDetailsPage,
+    showAssignCategoriesForm,
+    processAssignCategoriesForm,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm,
+    categoryValidation
 } from './controllers/categories.js';
 
 import { testErrorPage } from './controllers/errors.js';
@@ -62,13 +63,13 @@ USER REGISTRATION
 ========================= */
 
 router.get(
-'/register',
-showUserRegistrationForm
+    '/register',
+    showUserRegistrationForm
 );
 
 router.post(
-'/register',
-processUserRegistrationForm
+    '/register',
+    processUserRegistrationForm
 );
 
 /* =========================
@@ -76,13 +77,13 @@ USER LOGIN
 ========================= */
 
 router.get(
-'/login',
-showLoginForm
+    '/login',
+    showLoginForm
 );
 
 router.post(
-'/login',
-processLoginForm
+    '/login',
+    processLoginForm
 );
 
 /* =========================
@@ -90,8 +91,8 @@ USER LOGOUT
 ========================= */
 
 router.get(
-'/logout',
-processLogout
+    '/logout',
+    processLogout
 );
 
 /* =========================
@@ -99,18 +100,24 @@ DASHBOARD (PROTECTED)
 ========================= */
 
 router.get(
-'/dashboard',
-requireLogin,
-showDashboard
+    '/dashboard',
+    requireLogin,
+    showDashboard
 );
 
 /* =========================
 ORGANIZATIONS
 ========================= */
 
-router.get('/organizations', showOrganizationsPage);
+router.get(
+    '/organizations',
+    showOrganizationsPage
+);
 
-router.get('/organization/:id', showOrganizationDetailsPage);
+router.get(
+    '/organization/:id',
+    showOrganizationDetailsPage
+);
 
 /* =========================
 NEW ORGANIZATION
@@ -118,16 +125,16 @@ ADMIN ONLY
 ========================= */
 
 router.get(
-'/new-organization',
-requireRole('admin'),
-showNewOrganizationForm
+    '/new-organization',
+    requireRole('admin'),
+    showNewOrganizationForm
 );
 
 router.post(
-'/new-organization',
-requireRole('admin'),
-organizationValidation,
-processNewOrganizationForm
+    '/new-organization',
+    requireRole('admin'),
+    organizationValidation,
+    processNewOrganizationForm
 );
 
 /* =========================
@@ -136,25 +143,31 @@ ADMIN ONLY
 ========================= */
 
 router.get(
-'/edit-organization/:id',
-requireRole('admin'),
-showEditOrganizationForm
+    '/edit-organization/:id',
+    requireRole('admin'),
+    showEditOrganizationForm
 );
 
 router.post(
-'/edit-organization/:id',
-requireRole('admin'),
-organizationValidation,
-processEditOrganizationForm
+    '/edit-organization/:id',
+    requireRole('admin'),
+    organizationValidation,
+    processEditOrganizationForm
 );
 
 /* =========================
 PROJECTS
 ========================= */
 
-router.get('/projects', showProjectsPage);
+router.get(
+    '/projects',
+    showProjectsPage
+);
 
-router.get('/project/:id', showProjectDetailsPage);
+router.get(
+    '/project/:id',
+    showProjectDetailsPage
+);
 
 /* =========================
 NEW PROJECT
@@ -162,16 +175,16 @@ ADMIN ONLY
 ========================= */
 
 router.get(
-'/new-project',
-requireRole('admin'),
-showNewProjectForm
+    '/new-project',
+    requireRole('admin'),
+    showNewProjectForm
 );
 
 router.post(
-'/new-project',
-requireRole('admin'),
-projectValidation,
-processNewProjectForm
+    '/new-project',
+    requireRole('admin'),
+    projectValidation,
+    processNewProjectForm
 );
 
 /* =========================
@@ -180,16 +193,16 @@ ADMIN ONLY
 ========================= */
 
 router.get(
-'/edit-project/:id',
-requireRole('admin'),
-showEditProjectForm
+    '/edit-project/:id',
+    requireRole('admin'),
+    showEditProjectForm
 );
 
 router.post(
-'/edit-project/:id',
-requireRole('admin'),
-projectValidation,
-processEditProjectForm
+    '/edit-project/:id',
+    requireRole('admin'),
+    projectValidation,
+    processEditProjectForm
 );
 
 /* =========================
@@ -198,24 +211,30 @@ ADMIN ONLY
 ========================= */
 
 router.get(
-'/project/:projectId/assign-categories',
-requireRole('admin'),
-showAssignCategoriesForm
+    '/project/:projectId/assign-categories',
+    requireRole('admin'),
+    showAssignCategoriesForm
 );
 
 router.post(
-'/project/:projectId/assign-categories',
-requireRole('admin'),
-processAssignCategoriesForm
+    '/project/:projectId/assign-categories',
+    requireRole('admin'),
+    processAssignCategoriesForm
 );
 
 /* =========================
 CATEGORIES
 ========================= */
 
-router.get('/categories', showCategoriesPage);
+router.get(
+    '/categories',
+    showCategoriesPage
+);
 
-router.get('/category/:id', showCategoryDetailsPage);
+router.get(
+    '/category/:id',
+    showCategoryDetailsPage
+);
 
 /* =========================
 NEW CATEGORY
@@ -223,16 +242,16 @@ ADMIN ONLY
 ========================= */
 
 router.get(
-'/new-category',
-requireRole('admin'),
-showNewCategoryForm
+    '/new-category',
+    requireRole('admin'),
+    showNewCategoryForm
 );
 
 router.post(
-'/new-category',
-requireRole('admin'),
-categoryValidation,
-processNewCategoryForm
+    '/new-category',
+    requireRole('admin'),
+    categoryValidation,
+    processNewCategoryForm
 );
 
 /* =========================
@@ -241,22 +260,36 @@ ADMIN ONLY
 ========================= */
 
 router.get(
-'/edit-category/:id',
-requireRole('admin'),
-showEditCategoryForm
+    '/edit-category/:id',
+    requireRole('admin'),
+    showEditCategoryForm
 );
 
 router.post(
-'/edit-category/:id',
-requireRole('admin'),
-categoryValidation,
-processEditCategoryForm
+    '/edit-category/:id',
+    requireRole('admin'),
+    categoryValidation,
+    processEditCategoryForm
+);
+
+/* =========================
+USERS LIST
+ADMIN ONLY
+========================= */
+
+router.get(
+    '/users',
+    requireRole('admin'),
+    showUsersPage
 );
 
 /* =========================
 ERROR TEST ROUTE
 ========================= */
 
-router.get('/test-error', testErrorPage);
+router.get(
+    '/test-error',
+    testErrorPage
+);
 
 export default router;

@@ -2,7 +2,8 @@ import bcrypt from 'bcrypt';
 
 import {
     createUser,
-    authenticateUser
+    authenticateUser,
+    getAllUsers
 } from '../models/users.js';
 
 /* =========================
@@ -174,7 +175,7 @@ const requireRole = (
             'You do not have permission to access that page.'
         );
 
-        return res.redirect('/');
+        return res.redirect('/dashboard');
     };
 };
 
@@ -202,6 +203,45 @@ const showDashboard = (
     );
 };
 
+/* =========================
+   USERS PAGE (ADMIN ONLY)
+========================= */
+
+const showUsersPage = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const users = await getAllUsers();
+
+        res.render(
+            'users',
+            {
+                title: 'Registered Users',
+                users
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            'USERS PAGE ERROR:',
+            error
+        );
+
+        req.flash(
+            'error',
+            'Unable to load users.'
+        );
+
+        return res.redirect(
+            '/dashboard'
+        );
+    }
+};
+
 export {
     showUserRegistrationForm,
     processUserRegistrationForm,
@@ -210,5 +250,6 @@ export {
     processLogout,
     requireLogin,
     requireRole,
-    showDashboard
+    showDashboard,
+    showUsersPage
 };
