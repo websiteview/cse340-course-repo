@@ -33,6 +33,8 @@ import {
     processNewProjectForm,
     showEditProjectForm,
     processEditProjectForm,
+    processVolunteerSignup,
+    processVolunteerRemoval,
     projectValidation
 } from './controllers/projects.js';
 
@@ -53,13 +55,13 @@ import { testErrorPage } from './controllers/errors.js';
 const router = express.Router();
 
 /* =========================
-HOME
+   HOME
 ========================= */
 
 router.get('/', showHomePage);
 
 /* =========================
-USER REGISTRATION
+   USER REGISTRATION
 ========================= */
 
 router.get(
@@ -73,7 +75,7 @@ router.post(
 );
 
 /* =========================
-USER LOGIN
+   USER LOGIN
 ========================= */
 
 router.get(
@@ -87,7 +89,7 @@ router.post(
 );
 
 /* =========================
-USER LOGOUT
+   USER LOGOUT
 ========================= */
 
 router.get(
@@ -96,7 +98,7 @@ router.get(
 );
 
 /* =========================
-DASHBOARD (PROTECTED)
+   DASHBOARD (PROTECTED)
 ========================= */
 
 router.get(
@@ -106,7 +108,7 @@ router.get(
 );
 
 /* =========================
-ORGANIZATIONS
+   ORGANIZATIONS
 ========================= */
 
 router.get(
@@ -120,8 +122,8 @@ router.get(
 );
 
 /* =========================
-NEW ORGANIZATION
-ADMIN ONLY
+   NEW ORGANIZATION
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -138,8 +140,8 @@ router.post(
 );
 
 /* =========================
-EDIT ORGANIZATION
-ADMIN ONLY
+   EDIT ORGANIZATION
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -156,7 +158,7 @@ router.post(
 );
 
 /* =========================
-PROJECTS
+   PROJECTS
 ========================= */
 
 router.get(
@@ -170,8 +172,25 @@ router.get(
 );
 
 /* =========================
-NEW PROJECT
-ADMIN ONLY
+   VOLUNTEER ROUTES
+   LOGIN REQUIRED
+========================= */
+
+router.post(
+    '/project/:id/volunteer',
+    requireLogin,
+    processVolunteerSignup
+);
+
+router.post(
+    '/project/:id/unvolunteer',
+    requireLogin,
+    processVolunteerRemoval
+);
+
+/* =========================
+   NEW PROJECT
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -188,8 +207,8 @@ router.post(
 );
 
 /* =========================
-EDIT PROJECT
-ADMIN ONLY
+   EDIT PROJECT
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -206,8 +225,8 @@ router.post(
 );
 
 /* =========================
-ASSIGN CATEGORIES
-ADMIN ONLY
+   ASSIGN CATEGORIES
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -223,7 +242,7 @@ router.post(
 );
 
 /* =========================
-CATEGORIES
+   CATEGORIES
 ========================= */
 
 router.get(
@@ -237,8 +256,8 @@ router.get(
 );
 
 /* =========================
-NEW CATEGORY
-ADMIN ONLY
+   NEW CATEGORY
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -255,8 +274,8 @@ router.post(
 );
 
 /* =========================
-EDIT CATEGORY
-ADMIN ONLY
+   EDIT CATEGORY
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -273,8 +292,8 @@ router.post(
 );
 
 /* =========================
-USERS LIST
-ADMIN ONLY
+   USERS LIST
+   ADMIN ONLY
 ========================= */
 
 router.get(
@@ -284,7 +303,7 @@ router.get(
 );
 
 /* =========================
-ERROR TEST ROUTE
+   ERROR TEST ROUTE
 ========================= */
 
 router.get(

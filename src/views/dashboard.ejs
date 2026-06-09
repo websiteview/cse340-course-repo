@@ -26,6 +26,73 @@
 
     <% } %>
 
+    <hr>
+
+    <h2>Projects I'm Volunteering For</h2>
+
+    <% if (
+        volunteerProjects &&
+        volunteerProjects.length > 0
+    ) { %>
+
+        <div class="projects-container">
+
+            <% volunteerProjects.forEach(project => { %>
+
+                <div class="project-card">
+
+                    <h3>
+                        <a href="/project/<%= project.project_id %>">
+                            <%= project.title %>
+                        </a>
+                    </h3>
+
+                    <p>
+                        <strong>Location:</strong>
+                        <%= project.location %>
+                    </p>
+
+                    <p>
+                        <strong>Date:</strong>
+
+                        <%= new Date(
+                            project.project_date
+                        ).toLocaleDateString(
+                            'en-US',
+                            {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            }
+                        ) %>
+
+                    </p>
+
+                    <form
+                        action="/project/<%= project.project_id %>/unvolunteer"
+                        method="POST"
+                    >
+
+                        <button type="submit">
+                            Remove Volunteer
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } else { %>
+
+        <p>
+            You have not volunteered for any projects yet.
+        </p>
+
+    <% } %>
+
 </main>
 
 <%- include('partials/footer') %>

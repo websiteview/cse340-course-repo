@@ -163,6 +163,105 @@ const updateProject = async (
 };
 
 /* =========================
+   ADD VOLUNTEER
+========================= */
+const addVolunteer = async (
+    userId,
+    projectId
+) => {
+
+    const query = `
+        INSERT INTO project_volunteer
+        (
+            user_id,
+            project_id
+        )
+        VALUES
+        (
+            $1,
+            $2
+        )
+        ON CONFLICT DO NOTHING;
+    `;
+
+    await db.query(
+        query,
+        [userId, projectId]
+    );
+};
+
+/* =========================
+   REMOVE VOLUNTEER
+========================= */
+const removeVolunteer = async (
+    userId,
+    projectId
+) => {
+
+    const query = `
+        DELETE FROM project_volunteer
+        WHERE user_id = $1
+        AND project_id = $2;
+    `;
+
+    await db.query(
+        query,
+        [userId, projectId]
+    );
+};
+
+/* =========================
+   CHECK IF USER IS VOLUNTEER
+========================= */
+const isUserVolunteer = async (
+    userId,
+    projectId
+) => {
+
+    const query = `
+        SELECT *
+        FROM project_volunteer
+        WHERE user_id = $1
+        AND project_id = $2;
+    `;
+
+    const result = await db.query(
+        query,
+        [userId, projectId]
+    );
+
+    return result.rows.length > 0;
+};
+
+/* =========================
+   GET USER VOLUNTEER PROJECTS
+========================= */
+const getVolunteerProjects = async (
+    userId
+) => {
+
+    const query = `
+        SELECT
+            p.project_id,
+            p.title,
+            p.location,
+            p.project_date
+        FROM project p
+        JOIN project_volunteer pv
+            ON p.project_id = pv.project_id
+        WHERE pv.user_id = $1
+        ORDER BY p.project_date;
+    `;
+
+    const result = await db.query(
+        query,
+        [userId]
+    );
+
+    return result.rows;
+};
+
+/* =========================
    EXPORTS
 ========================= */
 export {
@@ -170,5 +269,9 @@ export {
     getProjectsByOrganizationId,
     getProjectById,
     createProject,
-    updateProject
+    updateProject,
+    addVolunteer,
+    removeVolunteer,
+    isUserVolunteer,
+    getVolunteerProjects
 };

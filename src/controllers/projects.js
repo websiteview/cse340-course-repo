@@ -3,7 +3,10 @@ import {
     getAllProjects,
     getProjectById,
     createProject,
-    updateProject
+    updateProject,
+    addVolunteer,
+    removeVolunteer,
+    isUserVolunteer
 } from '../models/projects.js';
 
 import {
@@ -83,12 +86,25 @@ const showProjectDetailsPage = async (req, res) => {
 
     const categories = await getCategoriesByProjectId(projectId);
 
+    let isVolunteer = false;
+
+    if (
+        req.session.user
+    ) {
+
+        isVolunteer = await isUserVolunteer(
+            req.session.user.user_id,
+            projectId
+        );
+    }
+
     const title = project.title;
 
     res.render('project-details', {
         title,
         project,
-        categories
+        categories,
+        isVolunteer
     });
 };
 
@@ -141,15 +157,24 @@ const processNewProjectForm = async (req, res) => {
             organizationId
         );
 
-        req.flash('success', 'Project created successfully!');
+        req.flash(
+            'success',
+            'Project created successfully!'
+        );
 
         return res.redirect('/projects');
 
     } catch (error) {
 
-        console.error('CREATE PROJECT ERROR:', error);
+        console.error(
+            'CREATE PROJECT ERROR:',
+            error
+        );
 
-        req.flash('error', 'Error creating project');
+        req.flash(
+            'error',
+            'Error creating project'
+        );
 
         return res.redirect('/new-project');
     }
@@ -166,7 +191,10 @@ const showEditProjectForm = async (req, res) => {
 
     if (!project) {
 
-        req.flash('error', 'Project not found');
+        req.flash(
+            'error',
+            'Project not found'
+        );
 
         return res.redirect('/projects');
     }
@@ -197,7 +225,9 @@ const processEditProjectForm = async (req, res) => {
             req.flash('error', error.msg);
         });
 
-        return res.redirect(`/edit-project/${projectId}`);
+        return res.redirect(
+            `/edit-project/${projectId}`
+        );
     }
 
     try {
@@ -224,7 +254,9 @@ const processEditProjectForm = async (req, res) => {
             'Project updated successfully!'
         );
 
-        return res.redirect(`/project/${projectId}`);
+        return res.redirect(
+            `/project/${projectId}`
+        );
 
     } catch (error) {
 
@@ -245,6 +277,62 @@ const processEditProjectForm = async (req, res) => {
 };
 
 /* =========================
+   VOLUNTEER FOR PROJECT
+========================= */
+const processVolunteerSignup = async (
+    req,
+    res
+) => {
+
+    const projectId = req.params.id;
+
+    const userId =
+        req.session.user.user_id;
+
+    await addVolunteer(
+        userId,
+        projectId
+    );
+
+    req.flash(
+        'success',
+        'You are now volunteering for this project.'
+    );
+
+    res.redirect(
+        `/project/${projectId}`
+    );
+};
+
+/* =========================
+   REMOVE VOLUNTEER
+========================= */
+const processVolunteerRemoval = async (
+    req,
+    res
+) => {
+
+    const projectId = req.params.id;
+
+    const userId =
+        req.session.user.user_id;
+
+    await removeVolunteer(
+        userId,
+        projectId
+    );
+
+    req.flash(
+        'success',
+        'Volunteer signup removed.'
+    );
+
+    res.redirect(
+        `/project/${projectId}`
+    );
+};
+
+/* =========================
    EXPORTS
 ========================= */
 export {
@@ -254,5 +342,7 @@ export {
     processNewProjectForm,
     showEditProjectForm,
     processEditProjectForm,
+    processVolunteerSignup,
+    processVolunteerRemoval,
     projectValidation
 };
